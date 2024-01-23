@@ -27,8 +27,8 @@ public class MovieController {
     private CategoryRepository categoryRepository;
 
     @GetMapping
-    public List<Movie> getAllMovies() {
-        return movieRepository.findAll();
+    public List<Movie> getAllMovies(@RequestParam(name = "take", required = false) Integer take) {
+        return (take != null && take > 0) ? movieRepository.findTopN(take) : movieRepository.findAll();
     }
 
     @PostMapping
