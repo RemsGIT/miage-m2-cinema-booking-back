@@ -16,6 +16,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/tickets")
 public class TicketController {
     @Autowired
