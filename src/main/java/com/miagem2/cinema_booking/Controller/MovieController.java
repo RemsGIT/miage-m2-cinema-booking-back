@@ -28,8 +28,8 @@ public class MovieController {
     private CategoryRepository categoryRepository;
 
     @GetMapping
-    public List<Movie> getAllMovies(@RequestParam(name = "take", required = false) Integer take) {
-        return (take != null && take > 0) ? movieRepository.findTopN(take) : movieRepository.findAll();
+    public List<Movie> getAllMovies(@RequestParam(name = "last", required = false) String last) {
+        return (last != null && last.equals("true")) ? movieRepository.findFirst10ByOrderByIdDesc() : movieRepository.findAll();
     }
 
     @PostMapping
