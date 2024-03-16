@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.*;
 import io.jsonwebtoken.Jwts;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 @RestController
@@ -43,7 +45,13 @@ public class AuthController {
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             String jwtToken = JwtTokenHelper.generateToken(userDetails);
 
-            return ResponseEntity.ok(jwtToken);
+            User u = userService.findByEmail(userDetails.getUsername());
+
+            Map<String, Object> responseMap = new HashMap<>();
+            responseMap.put("user", Map.of("id", u.getId(), "email", u.getEmail()));
+            responseMap.put("jwt", jwtToken);
+
+            return ResponseEntity.ok(responseMap);
         } catch (AuthenticationException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body("Invalid email/password combination");
