@@ -42,7 +42,7 @@ public class RoomController {
             return roomRepository.save(room);
         }
 
-        return null; // Gérer le cas où la salle n'est pas trouvée
+        return null;
     }
 
     @DeleteMapping("/{roomId}")
