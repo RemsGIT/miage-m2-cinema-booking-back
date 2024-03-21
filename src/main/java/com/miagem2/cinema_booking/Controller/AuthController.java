@@ -62,7 +62,7 @@ public class AuthController {
     public ResponseEntity<?> registerUser(@RequestBody RegisterRequest registerRequest) {
         // Vérifiez si l'utilisateur existe déjà
         if (Objects.nonNull(userService.findByEmail(registerRequest.getEmail()))) {
-            return new ResponseEntity<>("Email is already taken!", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Email is already taken", HttpStatus.BAD_REQUEST);
         }
 
         // Créer un nouvel utilisateur

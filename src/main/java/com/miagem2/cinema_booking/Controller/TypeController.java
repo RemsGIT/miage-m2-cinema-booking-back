@@ -42,7 +42,7 @@ public class TypeController {
             return typeRepository.save(type);
         }
 
-        return null; // Gérer le cas où le type n'est pas trouvé
+        return null;
     }
 
     @DeleteMapping("/{typeId}")

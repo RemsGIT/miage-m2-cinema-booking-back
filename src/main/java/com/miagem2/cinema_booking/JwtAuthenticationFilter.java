@@ -27,8 +27,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         try {
             String token = extractTokenFromRequest(request);
 
-            System.out.println("ok");
-
             if (token != null && jwtTokenHelper.validateToken(token)) {
                 String username = jwtTokenHelper.extractUsername(token);
 
@@ -44,7 +42,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
         } catch (ExpiredJwtException e) {
             System.out.println(e.toString());
-            // Gérer les exceptions d'expiration du jeton ici
         }
 
         filterChain.doFilter(request, response);

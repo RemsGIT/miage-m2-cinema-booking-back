@@ -46,6 +46,16 @@ public class Category {
         this.movies = movies;
     }
 
+    public void addMovie(Movie movie) {
+        movies.add(movie);
+        movie.getCategories().add(this);
+    }
+
+    public void removeMovie(Movie movie) {
+        movies.remove(movie);
+        movie.getCategories().remove(this);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -57,5 +67,13 @@ public class Category {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    @PreRemove
+    private void manageRelations() {
+        for (Movie movie: this.movies) {
+            movie.getCategories().remove(this);
+        }
+        this.movies.clear();
     }
 }

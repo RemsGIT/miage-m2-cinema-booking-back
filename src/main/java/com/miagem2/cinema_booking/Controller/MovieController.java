@@ -10,10 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -35,7 +32,9 @@ public class MovieController {
     @PostMapping
     public Movie createMovie(@RequestBody MovieRequest movieRequest) {
         if (movieRequest.getCategoryIds() != null && !movieRequest.getCategoryIds().isEmpty()) {
-            List<Category> categories = categoryRepository.findAllById(movieRequest.getCategoryIds());
+            Set<Category> categories = new HashSet<>(categoryRepository.findAllById(movieRequest.getCategoryIds()));
+
+
 
             movieRequest.getMovie().setCategories(categories);
         }
@@ -80,16 +79,22 @@ public class MovieController {
     }
 
     @PutMapping("/{movieId}")
-    public Movie updateMovie(@PathVariable Long movieId, @RequestBody Movie movieDetails) {
+    public Movie updateMovie(@PathVariable Long movieId, @RequestBody MovieRequest movieRequest) {
         Movie movie = movieRepository.findById(movieId).orElse(null);
 
         if (movie != null) {
-            // Mettez à jour les détails du film
-            movie.setName(movieDetails.getName());
-            movie.setDescription(movieDetails.getDescription());
-            movie.setRelease(movieDetails.getRelease());
-            movie.setDuration(movieDetails.getDuration());
-            movie.setImage(movieDetails.getImage());
+            System.out.println("ok");
+            System.out.println(movieRequest.getMovie().getName());
+
+            movie.setName(movieRequest.getMovie().getName());
+            movie.setDescription(movieRequest.getMovie().getDescription());
+            movie.setRelease(movieRequest.getMovie().getRelease());
+            movie.setDuration(movieRequest.getMovie().getDuration());
+            movie.setImage(movieRequest.getMovie().getImage());
+
+            // Update movie's categories
+            Set<Category> categories = new HashSet<>(categoryRepository.findAllById(movieRequest.getCategoryIds()));
+            movie.setCategories(categories);
 
             return movieRepository.save(movie);
         }

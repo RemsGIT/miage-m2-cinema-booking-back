@@ -34,12 +34,12 @@ public class Movie {
     @JsonBackReference
     private List<Session> sessions;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "movie_category",
             joinColumns = @JoinColumn(name = "movie_id"),
             inverseJoinColumns = @JoinColumn(name = "category_id"))
-    private List<Category> categories;
+    protected Set<Category> categories = new HashSet<Category>();
 
     public Long getId() {
         return id;
@@ -97,11 +97,11 @@ public class Movie {
         this.sessions = sessions;
     }
 
-    public List<Category> getCategories() {
+    public Set<Category> getCategories() {
         return categories;
     }
 
-    public void setCategories(List<Category> categories) {
+    public void setCategories(Set<Category> categories) {
         this.categories = categories;
     }
 
