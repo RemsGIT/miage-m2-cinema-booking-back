@@ -27,8 +27,7 @@ public class Ticket {
     @JoinColumn(name = "session_id", nullable = false)
     private Session session;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "created_at", nullable = false)
+    @Column(name = "created_at", nullable = false, columnDefinition = "DATE")
     private Date createdAt;
 
     public Long getId() {

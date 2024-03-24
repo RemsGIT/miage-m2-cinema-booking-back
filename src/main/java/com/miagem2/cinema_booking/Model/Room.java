@@ -20,7 +20,7 @@ public class Room {
     @Column(name= "capacity", nullable = false, columnDefinition = "INTEGER")
     protected Integer capacity;
 
-    @OneToMany(mappedBy = "room")
+    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @JsonIgnore
     private List<Session> sessions;
 
@@ -54,6 +54,11 @@ public class Room {
 
     public void setSessions(List<Session> sessions) {
         this.sessions = sessions;
+    }
+
+    public void removeSession(Session session) {
+        this.sessions.remove(session);
+        session.setMovie(null);
     }
 
     @Override

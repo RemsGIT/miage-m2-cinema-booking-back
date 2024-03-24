@@ -105,6 +105,11 @@ public class Movie {
         this.categories = categories;
     }
 
+    public void removeSession(Session session) {
+        this.sessions.remove(session);
+        session.setMovie(null);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -20,7 +20,7 @@ public class Type {
     @Column(name = "price", nullable = false, columnDefinition = "FLOAT")
     private String price;
 
-    @OneToMany(mappedBy = "type")
+    @OneToMany(mappedBy = "type", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @JsonIgnore
     private List<Session> sessions;
 
@@ -54,6 +54,11 @@ public class Type {
 
     public void setSessions(List<Session> sessions) {
         this.sessions = sessions;
+    }
+
+    public void removeSession(Session session) {
+        this.sessions.remove(session);
+        session.setMovie(null);
     }
 
     @Override

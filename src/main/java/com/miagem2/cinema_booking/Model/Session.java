@@ -15,25 +15,24 @@ public class Session {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
-    private Long id;
+    protected Long id;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "date", nullable = false)
+    @Column(name = "date", nullable = false, columnDefinition = "DATE")
     private Date date;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "movie_id", nullable = false)
     private Movie movie;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "room_id", nullable = false)
     private Room room;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "type_id", nullable = false)
     private Type type;
 
-    @OneToMany(mappedBy = "session", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "session", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<Ticket> tickets;
 
@@ -96,5 +95,12 @@ public class Session {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    @PreRemove
+    public void preRemove() {
+        this.movie.removeSession(this);
+        this.type.removeSession(this);
+        this.room.removeSession(this);
     }
 }

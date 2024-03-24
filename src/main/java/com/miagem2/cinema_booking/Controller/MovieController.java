@@ -34,8 +34,6 @@ public class MovieController {
         if (movieRequest.getCategoryIds() != null && !movieRequest.getCategoryIds().isEmpty()) {
             Set<Category> categories = new HashSet<>(categoryRepository.findAllById(movieRequest.getCategoryIds()));
 
-
-
             movieRequest.getMovie().setCategories(categories);
         }
 
@@ -83,9 +81,6 @@ public class MovieController {
         Movie movie = movieRepository.findById(movieId).orElse(null);
 
         if (movie != null) {
-            System.out.println("ok");
-            System.out.println(movieRequest.getMovie().getName());
-
             movie.setName(movieRequest.getMovie().getName());
             movie.setDescription(movieRequest.getMovie().getDescription());
             movie.setRelease(movieRequest.getMovie().getRelease());
@@ -105,5 +100,10 @@ public class MovieController {
     @DeleteMapping("/{movieId}")
     public void deleteMovie(@PathVariable Long movieId) {
         movieRepository.deleteById(movieId);
+    }
+
+    @GetMapping("/search")
+    public List<Movie> searchMovies(@RequestParam(name = "name") String name) {
+        return movieRepository.findByNameContainingIgnoreCase(name);
     }
 }

@@ -37,8 +37,11 @@ public class SessionController {
         return sessionRepository.findAll();
     }
 
+    @GetMapping("/{sessionId}")
+    public Session getSessionById(@PathVariable Long sessionId) { return sessionRepository.findById(sessionId).orElse(null); }
+
     @PostMapping
-    public ResponseEntity<?> createSession(@RequestBody Session session) {
+    public Session createSession(@RequestBody Session session) {
         Optional<Movie> optionalMovie = movieRepository.findById(session.getMovie().getId());
         Optional<Room> optionalRoom = roomRepository.findById(session.getRoom().getId());
         Optional<Type> optionalType = typeRepository.findById(session.getType().getId());
@@ -50,14 +53,10 @@ public class SessionController {
 
             Session savedSession = sessionRepository.save(session);
 
-            String successMessage = "Session created";
-            ResponseEntity<Object> responseEntity = ResponseEntity.status(HttpStatus.CREATED).body(
-                    Map.of("message", successMessage, "session", Map.of("id", savedSession.getId(), "date", savedSession.getDate())));
-
-            return responseEntity;
-        } else {
-            return new ResponseEntity<>("Certaines des entités associées n'existent pas.", HttpStatus.BAD_REQUEST);
+            return savedSession;
         }
+
+        return null;
     }
 
     @DeleteMapping("/{sessionId}")
@@ -91,5 +90,28 @@ public class SessionController {
             return ResponseEntity.ok(responseMap);
         }
         return new ResponseEntity<>("Session not found", HttpStatus.NOT_FOUND);
+    }
+
+    @PutMapping("/{sessionId}")
+    public Session updateSession(@PathVariable Long sessionId, @RequestBody Session sessionBody) {
+        Session session = sessionRepository.findById(sessionId).orElse(null);
+
+        if(session != null) {
+            Optional<Movie> m = movieRepository.findById(sessionBody.getMovie().getId());
+            Optional<Room> r = roomRepository.findById(sessionBody.getRoom().getId());
+            Optional<Type> t = typeRepository.findById(sessionBody.getType().getId());
+
+            if(m.isPresent() && r.isPresent() && t.isPresent()) {
+                session.setDate(sessionBody.getDate());
+                session.setMovie(m.get());
+                session.setRoom(r.get());
+                session.setType(t.get());
+
+                return sessionRepository.save(session);
+
+            }
+        }
+
+        return null;
     }
 }
