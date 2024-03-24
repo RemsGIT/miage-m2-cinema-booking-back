@@ -35,7 +35,6 @@ public class TypeController {
         Type type = typeRepository.findById(typeId).orElse(null);
 
         if (type != null) {
-            // Mettez à jour les détails du type
             type.setName(typeDetails.getName());
             type.setPrice(typeDetails.getPrice());
 

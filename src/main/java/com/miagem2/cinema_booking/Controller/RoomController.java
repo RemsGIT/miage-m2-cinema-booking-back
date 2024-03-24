@@ -35,7 +35,6 @@ public class RoomController {
         Room room = roomRepository.findById(roomId).orElse(null);
 
         if (room != null) {
-            // Mettez à jour les détails de la salle
             room.setName(roomDetails.getName());
             room.setCapacity(roomDetails.getCapacity());
 

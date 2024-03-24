@@ -37,7 +37,6 @@ public class MovieController {
             movieRequest.getMovie().setCategories(categories);
         }
 
-        // Enregistrer le film en base de données
         Movie savedMovie = movieRepository.save(movieRequest.getMovie());
 
         return savedMovie;
@@ -53,6 +52,7 @@ public class MovieController {
         Optional<Movie> movie =  movieRepository.findById(movieId);
 
         if (movie.isPresent()) {
+            // Build object response => get session details on movie
             List<Map<String, Object>> sessions = movie.get().getSessions().stream()
                     .map(session -> {
                         Map<String, Object> sessionMap = new HashMap<>();

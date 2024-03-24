@@ -60,12 +60,12 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody RegisterRequest registerRequest) {
-        // Vérifiez si l'utilisateur existe déjà
+        // Check if user already exists
         if (Objects.nonNull(userService.findByEmail(registerRequest.getEmail()))) {
             return new ResponseEntity<>("Email is already taken", HttpStatus.BAD_REQUEST);
         }
 
-        // Créer un nouvel utilisateur
+        // Create new user
         User user = new User();
         user.setEmail(registerRequest.getEmail());
         user.setPassword(registerRequest.getPassword());

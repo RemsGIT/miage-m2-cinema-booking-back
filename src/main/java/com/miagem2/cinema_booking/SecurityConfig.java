@@ -39,6 +39,7 @@ public class SecurityConfig  {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        // Define routes to protect
         http
                 .csrf().disable()
                 .authorizeHttpRequests(authorize -> authorize
