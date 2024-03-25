@@ -3,6 +3,7 @@ package com.miagem2.cinema_booking.Controller;
 import com.miagem2.cinema_booking.EntityRequest.MovieRequest;
 import com.miagem2.cinema_booking.Model.Category;
 import com.miagem2.cinema_booking.Model.Movie;
+import com.miagem2.cinema_booking.Model.Session;
 import com.miagem2.cinema_booking.Repository.CategoryRepository;
 import com.miagem2.cinema_booking.Repository.MovieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,6 +55,7 @@ public class MovieController {
         if (movie.isPresent()) {
             // Build object response => get session details on movie
             List<Map<String, Object>> sessions = movie.get().getSessions().stream()
+                    .sorted(Comparator.comparing(Session::getDate))
                     .map(session -> {
                         Map<String, Object> sessionMap = new HashMap<>();
                         sessionMap.put("id", session.getId());
